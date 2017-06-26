@@ -12,11 +12,11 @@
   integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
   crossorigin="anonymous"></script>
 <h1>
-  {{path}}
+  {{path}} : indexified!!
 </h1>
 
   <div class="input-group">
-    <input type="text" class="form-control" id="search-input">
+    <input type="text" class="form-control" id="search-input" placeholder="search with spaces...">
     <span class="input-group-btn">
       <button class="btn btn-default" type="button" id="search-button">Go!</button>
     </span>
@@ -60,6 +60,7 @@
 </table>
 <script>
 $(function(){
+  var datas = ['assign','subject'];
   var search = function(){
     var query = $('#search-input').val();
     $('tr').removeClass('hidden');
@@ -68,10 +69,13 @@ $(function(){
     }
     $('tbody').find('tr').each(function(inx,row){
       var $row = $(row);
-      if( $row.data('assign').indexOf(query) <= -1 && $row.data('subject').indexOf(query) <= -1){
+      var queries = query.split(' ');
+      var allMatch = queries.every(q=>{
+        return datas.some(d=>$row.data(d).indexOf(q) > -1);
+      });
+      if(!allMatch){
         $row.addClass('hidden');
       }
-
     });
   };
 
