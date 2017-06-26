@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+</head>
+<body>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+  src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+  integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
+  crossorigin="anonymous"></script>
+<h1>
+  {{path}}
+</h1>
+
+  <div class="input-group">
+    <input type="text" class="form-control" id="search-input">
+    <span class="input-group-btn">
+      <button class="btn btn-default" type="button" id="search-button">Go!</button>
+    </span>
+  </div>
+
+<table class="table">
+  <thead>
+    <tr>
+    <td>
+      #
+    </td>
+    <td>
+      担当者
+    </td>
+    <td>
+      概要
+    </td>
+    <td>
+      SVNリンク
+    </td>
+  </tr>
+  </thead>
+  <tbody>
+    {{#tickets}}
+    <tr data-assign="{{assigned_to.name}}" data-subject="{{subject}}">
+      <td>
+        <a href="{{redmine_url}}">{{id}}</a>
+      </td>
+      <td>
+        {{assigned_to.name}}
+      </td>
+      <td>
+        {{subject}}
+      </td>
+      <td>
+        <a href="#">link</a>
+      </td>
+    </tr>
+    {{/tickets}}
+  </tbody>
+</table>
+<script>
+$(function(){
+  var search = function(){
+    var query = $('#search-input').val();
+    $('tr').removeClass('hidden');
+    if(query.length == 0){
+      return;
+    }
+    $('tbody').find('tr').each(function(inx,row){
+      var $row = $(row);
+      if( $row.data('assign').indexOf(query) <= -1 && $row.data('subject').indexOf(query) <= -1){
+        $row.addClass('hidden');
+      }
+
+    });
+  };
+
+  $('#search-button').on('click',search);
+  $('#search-input').on('compositionend',search);
+  $('#search-input').on('keyup',e=>{
+    if(e.keyCode == 8 || e.keyCode == 46 || e.keyCode==13){
+      search();
+    }
+  });
+
+}());
+</script>
+</body>
+
+</html>
